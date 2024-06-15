@@ -68,7 +68,7 @@ jobs:
         gcloud auth configure-docker "$GAR_LOCATION-docker.pkg.dev"
     - name: Publish
       run: |-
-        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+        docker push "us-central1-docker.pkg.dev/pcn-payground/c2c-trace/$IMAGE:$GITHUB_SHA"
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
