@@ -37,13 +37,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-
+        
     # Alternative option - authentication via credentials json
     - id: 'auth'
       uses: 'google-github-actions/auth@v0'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+    # Scan with Twistcli
+    - name: Download twistcli from the Prisma Cloud Compute Console
+      run: |
+        curl --user ${{ secrets.PRISMA_ACCESS_KEY }}:${{ secrets.PRISMA_SECRET_KEY }} --output ./twistcli ${{ secrets.PRISMA_COMPUTE_URL }}/api/v1/util/twistcli 
+        chmod a+x ./twistcli 
+        
     #- name: Docker configuration
     #  run: |-
     #    echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
@@ -61,7 +67,12 @@ jobs:
           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
+
+    - name: Scan the image
+      env:
+        IMAGE_TAG: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+      run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password ${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
+
     # Push the Docker image to Google Artifact Registry
     - name: Authenticate
       run: |-
