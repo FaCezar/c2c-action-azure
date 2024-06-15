@@ -70,7 +70,7 @@ jobs:
           
     # Scan the Docker Image 
     - name: Scan the image
-      env:
+      env: |
         IMAGE_TAG: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
       run: |-
         ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password ${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
