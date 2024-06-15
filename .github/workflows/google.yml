@@ -22,7 +22,7 @@ env:
   GKE_CLUSTER: acezar-gke-cluster-c2c    # TODO: update to cluster name
   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
   DEPLOYMENT_NAME: c2c-trace # TODO: update to deployment name
-  REPOSITORY: us-central1-docker.pkg.dev/pcn-payground/c2c-trace # TODO: update to Artifact Registry docker repository
+  REPOSITORY: c2c-trace # TODO: update to Artifact Registry docker repository
   IMAGE: c2c-image
 
 jobs:
@@ -63,6 +63,9 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
     # Push the Docker image to Google Artifact Registry
+    - name: Authenticate
+      run: |-
+        gcloud auth configure-docker "$GAR_LOCATION-docker.pkg.dev"
     - name: Publish
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
