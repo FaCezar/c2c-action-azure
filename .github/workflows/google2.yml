@@ -67,11 +67,13 @@ jobs:
           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
-
+          
+    # Scan the Docker Image 
     - name: Scan the image
       env:
         IMAGE_TAG: "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
-      run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password ${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
+      run: |-
+        ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password ${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
 
     # Push the Docker image to Google Artifact Registry
     - name: Authenticate
