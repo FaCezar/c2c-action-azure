@@ -25,6 +25,13 @@ jobs:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
+       
+    - name: Build the frontend image and push it to ACR
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/c2c-trace:${{ github.sha }}
+        file: Dockerfile
 
     - name: Run Prisma Cloud 
       id: prisma-cloud
@@ -33,10 +40,3 @@ jobs:
        PRISMA_API_URL: https://api4.prismacloud.io
       with:
        api-key: ${{ secrets.BC_API_KEY }}
-       
-    - name: Build the frontend image and push it to ACR
-      uses: docker/build-push-action@v5
-      with:
-        push: true
-        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/c2c-trace:${{ github.sha }}
-        file: Dockerfile
