@@ -44,7 +44,10 @@ jobs:
        PRISMA_API_URL: https://api4.prismacloud.io
       with:
        api-key: ${{ secrets.BC_API_KEY }}
-
+       use_enforcement_rules: true
+       download_external_modules: true
+       repo_root_for_plan_enrichment: ./
+      
     - name: Scan the image
       env:
        IMAGE_TAG: nodejs_demo_image
