@@ -13,6 +13,9 @@ jobs:
     defaults:
       run:
         shell: bash
+
+
+    
  
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -26,6 +29,14 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
+    - name: Run Prisma Cloud 
+      id: prisma-cloud
+      uses: bridgecrewio/checkov-action@master
+      env:
+       PRISMA_API_URL: https://api4.prismacloud.io
+      with:
+       api-key: ${{ secrets.BC_API_KEY }}
+       
     - name: Build the frontend image and push it to ACR
       uses: docker/build-push-action@v5
       with:
