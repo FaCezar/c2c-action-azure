@@ -51,4 +51,4 @@ jobs:
     - name: Scan the image
       env:
        IMAGE_TAG: ${{ secrets.REGISTRY_LOGIN_SERVER }}/c2c-trace:${{ github.sha }}
-      run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
+      run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password ${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
