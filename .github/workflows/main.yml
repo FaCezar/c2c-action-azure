@@ -48,5 +48,5 @@ jobs:
 
     - name: Scan the image
       env:
-      IMAGE_TAG: nodejs_demo_image
+       IMAGE_TAG: nodejs_demo_image
       run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
