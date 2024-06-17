@@ -18,7 +18,12 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
- 
+
+    - name: Download twistcli from the Prisma Cloud Compute Console
+      run: |
+       curl --user ${{ secrets.PRISMA_ACCESS_KEY }}:${{ secrets.PRISMA_SECRET_KEY }} --output ./twistcli ${secrets.PRISMA_COMPUTE_URL }}/api/v1/util/twistcli
+       chmod a+x ./twistcli 
+
     - name: 'Docker Login'
       uses: azure/docker-login@v1
       with:
@@ -40,3 +45,8 @@ jobs:
        PRISMA_API_URL: https://api4.prismacloud.io
       with:
        api-key: ${{ secrets.BC_API_KEY }}
+
+    - name: Scan the image
+      env:
+      IMAGE_TAG: nodejs_demo_image
+      run: ./twistcli images scan --address ${{ secrets.PRISMA_COMPUTE_URL }} --user ${{ secrets.PRISMA_ACCESS_KEY }} --password${{ secrets.PRISMA_SECRET_KEY }} --details $IMAGE_TAG
