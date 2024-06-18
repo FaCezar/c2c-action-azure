@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/c2c-trace:latest
+        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/c2c-trace:${{ github.sha }}
         file: Dockerfile
 
     - name: Run Prisma Cloud 
